@@ -1,0 +1,77 @@
+--- a/dlls/winex11.drv/init.c
++++ b/dlls/winex11.drv/init.c
+@@ -295,10 +295,53 @@
+     }
+ }
+ 
++static int foreign_origin_error( Display *display, XErrorEvent *event, void *arg )
++{
++    return event->error_code == BadWindow;
++}
++
++static RECT client_surface_get_rect( HWND hwnd, struct x11drv_client_surface *surface, BOOL offscreen )
++{
++    RECT rect = offscreen ? surface->client.virtual_rect : surface->client.monitor_rect;
++    HWND toplevel = surface->client.toplevel;
++    struct x11drv_win_data *data;
++    Window target, child;
++    POINT origin = {0}, target_origin, toplevel_client = {0};
++    BOOL translated, failed;
++    int root_x, root_y;
++    UINT dpi;
++
++    if (offscreen || !hwnd || !toplevel || hwnd == toplevel) return rect;
++    if ((data = get_win_data( hwnd )))
++    {
++        release_win_data( data );
++        return rect;
++    }
++    if (!(dpi = NtUserGetWinMonitorDpi( hwnd, MDT_RAW_DPI ))) return rect;
++    if (!(target = X11DRV_get_whole_window( toplevel ))) return rect;
++
++    RtlSetLastWin32Error( ERROR_SUCCESS );
++    if (!NtUserMapWindowPoints( hwnd, toplevel, &origin, 1, dpi ) &&
++        RtlGetLastWin32Error() != ERROR_SUCCESS) return rect;
++    NtUserMapWindowPoints( toplevel, 0, &toplevel_client, 1, dpi );
++
++    X11DRV_expect_error( gdi_display, foreign_origin_error, NULL );
++    translated = XTranslateCoordinates( gdi_display, target, DefaultRootWindow( gdi_display ),
++                                        0, 0, &root_x, &root_y, &child );
++    failed = X11DRV_check_error();
++    if (!translated || failed) return rect;
++    target_origin = root_to_virtual_screen( root_x, root_y );
++    origin.x += toplevel_client.x - target_origin.x;
++    origin.y += toplevel_client.y - target_origin.y;
++
++    OffsetRect( &rect, origin.x - rect.left, origin.y - rect.top );
++    return rect;
++}
++
+ static void client_surface_update_geometry( HWND hwnd, struct x11drv_client_surface *surface )
+ {
+     XWindowChanges changes = surface->changes;
+-    RECT rect = surface->client.offscreen ? surface->client.virtual_rect : surface->client.monitor_rect;
++    RECT rect = client_surface_get_rect( hwnd, surface, surface->client.offscreen );
+     int mask = 0;
+ 
+     changes.x = rect.left;
+@@ -332,6 +375,7 @@
+     unsigned int nchildren;
+     int x = 0, y = 0;
+     BOOL target_is_dummy, failed;
++    RECT rect;
+ 
+     if (!surface->window) return;
+     dummy_parent = get_dummy_parent();
+@@ -355,8 +399,9 @@
+         if (!target) target = dummy_parent;
+         else
+         {
+-            x = surface->client.monitor_rect.left;
+-            y = surface->client.monitor_rect.top;
++            rect = client_surface_get_rect( surface->client.hwnd, surface, FALSE );
++            x = rect.left;
++            y = rect.top;
+         }
+     }
+ 

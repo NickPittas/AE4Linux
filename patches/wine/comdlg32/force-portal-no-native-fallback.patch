@@ -1,0 +1,18 @@
+diff --git a/dlls/comdlg32/itemdlg.c b/dlls/comdlg32/itemdlg.c
+--- a/dlls/comdlg32/itemdlg.c
++++ b/dlls/comdlg32/itemdlg.c
+@@ -3377,8 +3377,13 @@ static HRESULT WINAPI IFileDialog2_fnShow(IFileDialog2 *iface, HWND hwndOwner)
+     {
+         hr = try_portal_itemdlg(This, hwndOwner);
+         TRACE("IFileDialog2_Show returning %08lx from portal\n", hr);
+-        if (hr != E_FAIL)  /* E_FAIL means portal not available, fall through */
++        if (hr != E_FAIL)
+             return hr;
++        if (get_portal_policy() == PORTAL_POLICY_FORCE)
++        {
++            TRACE("portal attempt failed (hr=%08lx), FORCE policy refuses native itemdlg fallback\n", hr);
++            return hr;
++        }
+         TRACE("portal attempt failed (hr=%08lx), falling back to native itemdlg\n", hr);
+     }
+ 

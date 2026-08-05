@@ -1,0 +1,10 @@
+status	path	purpose	evidence
+accepted	patches/wine/winex11/cep-v71-to-v87.patch	generic foreign CEP surface alignment	accepted-state-20260803
+accepted	patches/wine/comdlg32/force-portal-no-native-fallback.patch	FORCE portal refuses native fallback	v105 portal review
+provisional	patches/wine/comdlg32/xdg-portal-base.patch	XDG portal common-dialog implementation	MR10060-derived capture
+missing	Wine D2D production patch series	D2D command-list/layer/Flush behavior	accepted d2d1.dll hash only
+missing	Wine DirectWrite production patch series	family lookup/glyph safety/locking	accepted dwrite.dll hash only
+missing	Wine win32u production patch series	client-surface/native owner behavior	accepted win32u.so hash only
+missing	Wine winex11 v90 delta	transform cache after v87	accepted winex11.so hash only
+missing	DXVK v60/v63 production patch series	shared storage and async interop	accepted d3d11/dxgi hashes only
+missing	nvcuda v65 production patch series	async D3D11/CUDA bridge and tombstones	accepted nvcuda hash only

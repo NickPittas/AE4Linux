@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Adobe After Effects (Aegnux)
+Comment=After Effects through the AE4Linux patched Wine runtime
+Exec=aegnux-after-effects
+Icon=application-x-executable
+Terminal=false
+Categories=AudioVideo;
+StartupWMClass=AfterFX.exe

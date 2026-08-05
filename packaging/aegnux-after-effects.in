@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+base=${AEGNUX_BASE:-"$HOME/.var/app/com.relative.Aegnux/data/aegnux"}
+cache=${AEGNUX_CACHE:-"$HOME/.var/app/com.relative.Aegnux/cache/aegnux-debug"}
+runner="$base/runner-11.12-test"
+prefix="$base/wineprefix-11.12-test"
+nvcuda=$(readlink -f "$prefix/drive_c/windows/system32/nvcuda.dll")
+
+[ -x "$runner/bin/wine" ] || { echo "missing patched runner: $runner" >&2; exit 1; }
+[ -d "$prefix" ] || { echo "missing patched prefix: $prefix" >&2; exit 1; }
+[ -n "$nvcuda" ] || { echo "missing nvcuda bridge" >&2; exit 1; }
+
+winepath=${WINEPATH_OVERRIDE:-"Z:\\home\\$(id -un)\\.var\\app\\com.relative.Aegnux\\data\\aegnux\\AE\\Plug-ins\\Effects\\mochaAE\\Resources\\mochaui\\bin"}
+exec flatpak run \
+    --branch=master \
+    --arch=x86_64 \
+    --env=WINEPREFIX="$prefix" \
+    --env=PATH="$runner/bin:/app/bin:/usr/bin" \
+    --env=WINEPATH="$winepath" \
+    --env=WINEDLOVERRIDES=AdobeGrowthSDK= \
+    --env=DXVK_CONFIG_FILE="$cache/dxvk-ae-sync.conf" \
+    --env=WINEDLLPATH="$(dirname "$nvcuda")" \
+    --env=WINEDEBUG=-all \
+    --env=WINE_FORCE_PORTAL=1 \
+    --command=sh \
+    com.relative.Aegnux \
+    -c 'cd "$1" && exec "$2" AfterFX.exe' sh "$base/AE" "$runner/bin/wine"

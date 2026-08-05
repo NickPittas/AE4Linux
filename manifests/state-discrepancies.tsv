@@ -1,0 +1,2 @@
+severity	component	recorded_accepted_hash	currently_observed_hash	meaning	action
+blocker	runner shell32.dll	9ede77760b4e8979ca81a637b274851395a358c581ebc9c8db6d5574cc497f79	12ad530bf3097d7bb6fbb46bb5f3278df7012bc154d3cf42673056d3700133f6	Current runner contains the locally built ShellView-modified binary, despite accepted-state prose saying original shell32 was restored.	Do not call the current machine a clean accepted release; resolve by explicit rollback or reclassification.

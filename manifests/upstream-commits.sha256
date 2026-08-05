@@ -1,0 +1,6 @@
+# Upstream/provenance identifiers. These are inputs, not runtime hashes.
+Aegnux Flatpak commit: 1fe2615cf776c1dd621436f7a0355f606887bdd92de985008c5e07e1c4e77bce
+Wine source commit: 996020f410e7a1aa2dd6b44cf740854ea524d31a
+Wine runner reported version: wine-11.12.r0.gbc50fb14 (TkG Staging NTsync)
+DXVK reported major version: 3.0.1+
+nvidia-libs nvcuda bridge source commit: 200ccc2 (v0.8.5; nvcuda submodule e4f178302231ed77f5e03152f70d8ad3dcbc6193)

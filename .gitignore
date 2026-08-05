@@ -1,0 +1,23 @@
+# Never commit installed/proprietary/runtime payloads.
+AE/
+runner/
+runner-11.12-test/
+wineprefix/
+wineprefix-11.12-test/
+aegnux-debug/
+*.flatpak
+*.AppImage
+*.dmp
+*.core
+captures/
+cache/
+logs/
+reports/
+# Diagnostic and forbidden test/harness debris.
+tests/
+harness/
+__pycache__/
+*.o
+*.so
+*.dll
+*.exe

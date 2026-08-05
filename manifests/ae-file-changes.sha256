@@ -1,0 +1,6 @@
+# Adobe-side change. The binary itself is intentionally not stored here.
+# The helper applies the one-byte transformation only to the matching original.
+original  4257c0e495aa2bb872a30c76787e7acbf02d42c338014072ff541ebd2d4c45e4  AE/CEPHtmlEngine/libcef.dll
+after     a7ce53fa92016a3f6bcb12f4e8ce3b85222b58d7139a0063f9e5e9ad144b397f  AE/CEPHtmlEngine/libcef.dll
+offset    0x6d56ebe
+octets    0xa5 -> 0x1c
