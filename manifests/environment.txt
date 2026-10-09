@@ -1,4 +1,4 @@
-# Machine assumptions captured with the accepted state.
+# Recorded capture environment, not a supported-hardware requirement.
 Flatpak app: com.relative.Aegnux
 Flatpak branch: master
 Flatpak runtime: org.kde.Platform/x86_64/6.8
@@ -6,7 +6,7 @@ Portal policy: WINE_FORCE_PORTAL=1
 Normal tracing: WINEDEBUG=-all
 DXVK config: dxgi.syncInterval = 1
 Graphics: NVIDIA RTX 4090, driver 610.43.3 (machine-specific)
-Media example: /mnt/Mandalore (machine-specific; grant read-only equivalent)
+Media example: /mnt/media (placeholder; replace with your media mount and grant read-only access)
 Original runner: $HOME/.var/app/com.relative.Aegnux/data/aegnux/runner
 Patched runner: $HOME/.var/app/com.relative.Aegnux/data/aegnux/runner-11.12-test
 Original prefix: $HOME/.var/app/com.relative.Aegnux/data/aegnux/wineprefix

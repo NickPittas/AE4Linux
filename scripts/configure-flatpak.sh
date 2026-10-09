@@ -2,7 +2,8 @@
 set -eu
 
 app=${APP_ID:-com.relative.Aegnux}
-media=${1:-/mnt/Mandalore}
+# Example only: pass your actual absolute media path as the first argument.
+media=${1:-/mnt/media}
 case "$media" in
     /*) ;;
     *) echo "media path must be absolute" >&2; exit 2 ;;

@@ -21,11 +21,13 @@ This is the consolidated map of changes that matter to the accepted After Effect
 
 ### Filesystem policy
 
+`/mnt/media` is a placeholder; replace it with your actual media mount.
+
 The sequence fix requires the host directory containing sibling frames to be visible inside the sandbox. The safe minimum is read-only access, for example:
 
 ```sh
 flatpak override --user --nofilesystem=/mnt \
-  --filesystem=/mnt/Mandalore:ro com.relative.Aegnux
+  --filesystem=/mnt/media:ro com.relative.Aegnux
 ```
 
 The later accepted NAS profile uses explicit approved mounts and `C:\NAS` links. It is documented in `docs/reproduction.md`; do not broaden `/mnt` merely for convenience.

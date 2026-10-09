@@ -3,7 +3,7 @@
 Source checkout:
 
 ```text
-/home/npittas/.var/app/com.relative.Aegnux/cache/aegnux-debug/wine-src-11.12-ae-combined-fix
+$HOME/.var/app/com.relative.Aegnux/cache/aegnux-debug/wine-src-11.12-ae-combined-fix
 ```
 
 Base commit:

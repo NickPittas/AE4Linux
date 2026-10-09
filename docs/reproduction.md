@@ -1,6 +1,8 @@
-# Reproduce the accepted AE4Linux state
+# Recover the recorded AE4Linux state
 
-This guide is deliberately split into **artifact mode** and **source-build mode**. Artifact mode is the only mode currently fully specified by the recovered machine state. Source-build mode becomes authoritative after the missing clean patch series listed in `docs/reproducibility-status.md` is completed.
+This is a historical setup/recovery procedure, not an installer or a complete public reproduction recipe. The author recorded a working runtime; that result has not been independently reproduced here.
+
+**Artifact mode** assumes you already possess matching captured runner, prefix, and rebuilt module files, plus your legally obtained AE/Aegnux installation. Those artifacts are not supplied by this repository, and hashes cannot reconstruct them. **Source-build mode** remains an incomplete outline until the missing clean patch series and build inputs listed in `docs/reproducibility-status.md` are recovered.
 
 ## 0. Preconditions
 
@@ -11,14 +13,14 @@ This guide is deliberately split into **artifact mode** and **source-build mode*
 - A media root containing image-sequence siblings.
 - Do not run this procedure while After Effects is running.
 
-All paths below are examples. Set variables for the target machine; do not copy `/home/npittas` literally.
+All paths below are examples. `$HOME` means your own home directory; replace `/mnt/media` with your actual media mount and set the variables for your target machine.
 
 ```sh
 export APP_ID=com.relative.Aegnux
 export AE4_ROOT="$HOME/AE4Linux"
 export AEGNUX_BASE="$HOME/.var/app/$APP_ID/data/aegnux"
 export AEGNUX_CACHE="$HOME/.var/app/$APP_ID/cache/aegnux-debug"
-export MEDIA_ROOT=/mnt/Mandalore
+export MEDIA_ROOT=/mnt/media
 ```
 
 ## 1. Install the unchanged Aegnux application
@@ -46,7 +48,7 @@ $AEGNUX_BASE/runner-11.12-test
 $AEGNUX_BASE/wineprefix-11.12-test
 ```
 
-Copying the accepted runner/prefix from a private backup is currently the shortest exact reproduction. Preserve symlinks and metadata:
+If you already have a captured runner/prefix in a user-owned backup, preserve its symlinks and metadata when restoring it. This alone does not resolve the recorded hash discrepancy or establish a portable reproduction:
 
 ```sh
 rsync -aHAX --numeric-ids backup/runner-11.12-test/ "$AEGNUX_BASE/runner-11.12-test/"
@@ -61,7 +63,7 @@ wine-11.12.r0.gbc50fb14 (TkG Staging NTsync)
 
 ## 3. Install accepted runtime modules
 
-Use the source-built or private-release artifacts listed in `manifests/accepted-binaries.sha256`. Stage only into the isolated runner/prefix:
+If you already have matching built artifacts, stage the modules identified in `manifests/accepted-binaries.sha256` only into the isolated runner/prefix. This repository supplies their hashes, not the artifacts or all source/build inputs:
 
 ```text
 runner-11.12-test/lib/wine/x86_64-unix/win32u.so
@@ -82,7 +84,7 @@ Run:
 "$AE4_ROOT/scripts/verify-state.sh"
 ```
 
-It must pass before launching AE. On the repository-creation machine it currently fails only for `shell32.dll`; see `manifests/state-discrepancies.tsv`. That mismatch is intentionally unresolved and the current machine must not be called a clean accepted release.
+The checker expects the final patched `libcef.dll` too, so an unpatched installation can fail this initial check. Re-run it after step 4. It must pass before treating the local files as matching the recorded hashes; passing is not a functional compatibility test. An earlier inventory reported a `shell32.dll` mismatch; see `manifests/state-discrepancies.tsv`. That discrepancy remains unresolved in the record and has not been rechecked on the reader's machine.
 
 ## 4. Apply the AE CEF change
 
